@@ -12,6 +12,7 @@ namespace NewtonsoftJsonSample
         static void Main(string[] args)
         {
             serializeJson();
+            deserialize();
             Console.Read();
         }
 
@@ -49,6 +50,29 @@ namespace NewtonsoftJsonSample
             //new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore } 可以忽略掉物件內容是null的資料，使他在序列化為Json資料時，不被刻意輸出。
             Console.WriteLine(JsonConvert.SerializeObject(students, Formatting.Indented, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }).ToString());
             Console.WriteLine(JsonConvert.SerializeObject(students, Formatting.None).ToString());
+        }
+        static void deserialize()
+        {
+            string sampleJson = @"[{""id"":""tom"",""nickname"":null,""exeam"":{""score"":95,""subject"":""C#""},""school"":{""name"":""ntpu"",""major"":""IM""}},{""id"":""mary"",""nickname"":""kitty"",""exeam"":null,""school"":{""name"":""SHU"",""major"":""IM""}}]";
+            List<Student> GroupOfStudents = JsonConvert.DeserializeObject<List<Student>>(sampleJson);
+            foreach (Student student in GroupOfStudents)
+            {
+                Console.WriteLine(string.Format("Student.id : {0}", student.id != null ? student.id : "NULL"));
+                Console.WriteLine(string.Format("Student.nickname : {0}", student.nickname != null ? student.nickname : "NULL"));
+                School school = student.school;
+                if (school != null)
+                {
+                    Console.WriteLine(string.Format("School.name : {0}", school.name != null ? school.name : "NULL"));
+                    Console.WriteLine(string.Format("School.major : {0}", school.major != null ? school.major : "NULL"));
+                }
+                Exeam exeam = student.exeam;
+                if (exeam != null)
+                {
+                    Console.WriteLine(string.Format("Exeam.subject : {0}", exeam.subject != null ? exeam.subject : "NULL"));
+                    Console.WriteLine(string.Format("Exeam.score : {0}", exeam.score != 0 ? exeam.score.ToString() : "NULL"));
+                }
+                Console.WriteLine("======================");
+            }
         }
     }
     public class School
